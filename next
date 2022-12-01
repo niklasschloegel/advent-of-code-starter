@@ -6,7 +6,6 @@ import random
 import shutil
 from argparse import ArgumentParser
 
-BLACKLIST = ["c"]
 today = datetime.date.today()
 
 
@@ -25,12 +24,22 @@ def create_year_folder(year: int):
     return dir_name
 
 
-def examine_random_template():
-    templates = [
+def init_blacklist():
+    with open("./blacklist.txt") as blacklist:
+        return blacklist.read().splitlines()
+
+
+def get_technologies():
+    blacklist = init_blacklist()
+    return [
         f.path
         for f in os.scandir("templates")
-        if f.is_dir() and template_dir_to_techname(f.path) not in BLACKLIST
+        if f.is_dir() and template_dir_to_techname(f.path) not in blacklist
     ]
+
+
+def examine_random_template():
+    templates = get_technologies()
     template = random.choice(templates)
     print(f"Choosing {template}")
     return template
@@ -60,15 +69,18 @@ def main():
         year = args["year"]
         technology = args["technology"]
 
-        year_dir = create_year_folder(year)
         if technology:
             template = f"templates/{technology.lower()}"
             if not os.path.exists(template):
                 print(f"Invalid technology: {technology}")
+                print(
+                    f"Available technologies are: {', '.join([template_dir_to_techname(t) for t in get_technologies()])}"
+                )
                 exit(-1)
         else:
             template = examine_random_template()
 
+        year_dir = create_year_folder(year)
         create_day_folder(year_dir, template)
 
 

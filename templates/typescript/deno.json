@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "prepare": "touch simple.txt input.txt && cp template.ts part1.ts && cp template.ts part2.ts",
+    "part1": "deno run --allow-read part1.ts -f input.txt",
+    "part1_simple": "deno run --allow-read part1.ts -d -f simple.txt",
+    "part2": "deno run --allow-read part2.ts -f input.txt",
+    "part2_simple": "deno run --allow-read part2.ts -d -f simple.txt",
+    "clean": "rm simple.txt input.txt part1.ts part2.ts"
+  },
+  "fmt": {
+    "options": {
+      "indentWidth": 4
+    }
+  }
+}

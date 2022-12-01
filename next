@@ -1,0 +1,76 @@
+#! /usr/bin/python3
+
+import datetime
+import os
+import random
+import shutil
+from argparse import ArgumentParser
+
+BLACKLIST = ["c"]
+today = datetime.date.today()
+
+
+def template_dir_to_techname(template_dir: str) -> str:
+    slash_index = template_dir.index("/")
+    return template_dir[slash_index + 1 :]
+
+
+def create_year_folder(year: int):
+    dir_name = f"./{year}"
+    if not os.path.exists(dir_name):
+        print(f"No directory for year {year} found. Creating new.")
+        os.makedirs(dir_name)
+    else:
+        print(f"Directory for year {year} already exists.")
+    return dir_name
+
+
+def examine_random_template():
+    templates = [
+        f.path
+        for f in os.scandir("templates")
+        if f.is_dir() and template_dir_to_techname(f.path) not in BLACKLIST
+    ]
+    template = random.choice(templates)
+    print(f"Choosing {template}")
+    return template
+
+
+def create_day_folder(year_dir: str, template_dir: str):
+    days = [f.path for f in os.scandir(year_dir) if f.is_dir()]
+    new_day = len(days) + 1
+
+    print(
+        f"Creating in {year_dir} for day {new_day} with technology {template_dir_to_techname(template_dir)}"
+    )
+
+    dir_name = f"{year_dir}/day-{new_day:02}"
+    shutil.copytree(template_dir, dir_name)
+
+
+def main():
+    parser = ArgumentParser(description="Create next AoC project from templates")
+    parser.add_argument("-y", "--year", type=int, default=today.year)
+    parser.add_argument("-t", "--technology", type=str, required=False)
+
+    args = vars(parser.parse_args())
+    if not args:
+        parser.print_help()
+    else:
+        year = args["year"]
+        technology = args["technology"]
+
+        year_dir = create_year_folder(year)
+        if technology:
+            template = f"templates/{technology.lower()}"
+            if not os.path.exists(template):
+                print(f"Invalid technology: {technology}")
+                exit(-1)
+        else:
+            template = examine_random_template()
+
+        create_day_folder(year_dir, template)
+
+
+if __name__ == "__main__":
+    main()

@@ -12,3 +12,4 @@ New templates should meet these requirements:
 * Use a flag to specify the file input to prevent duplicate code.
 * Provide a way to set up the working environment (like `make preview` in the [python template](./templates/python/)).
 * Include a `.vscode/` folder with recommended extensions for [VSCode](https://code.visualstudio.com/). It also can include workspace settings, to set up a formatter or similar.
+* Add potential files and folders to `.gitignore`. Maybe with the help of [gitignore.io](https://gitignore.io)

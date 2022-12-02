@@ -33,7 +33,7 @@ def main():
         debug_enabled = args["debug"]
 
         with open(file_name) as data:
-            solution = solve(data)
+            solution = solve(data.read())
             print(solution)
 
 

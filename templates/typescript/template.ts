@@ -2,9 +2,9 @@ import { parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
 
 let debugEnabled = false;
 
-function debug(out: string) {
+function debug(...data: any[]) {
   if (debugEnabled) {
-    console.log(out);
+    console.log(...data);
   }
 }
 

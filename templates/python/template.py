@@ -3,9 +3,9 @@ from argparse import ArgumentParser
 debug_enabled = False
 
 
-def debug(out: str):
+def debug(*out):
     if debug_enabled:
-        print(out)
+        print(*out)
 
 
 # ----------------------------- SOLUTION CODE -----------------------------
